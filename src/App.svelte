@@ -1,86 +1,92 @@
 <script>
-	import Tiptap from './lib/Tiptap.svelte'
-	import {expression} from '../store/store.js'
-	
-	export let name;
 
-	let calcView = "1+2=3"
+  import NumPadKey from "./lib/NumPadKey.svelte";
+  import { create, all } from 'mathjs'
 
-	function zero() {
-		expression.update(exps => exps + '0');
-		console.log('0');
-	}
+  export let name;
+  
+  const config = { }
+  const math = create(all, config)
+  
+  let input = "";
+  let output = "";
+  let history = "";
 
+  const keys = [
+    "7","8","9","DEL","AC",
+    "4","5","6","MULT","DIV",
+    "1","2","3","ADD","SUB",
+    "0",".","EXP","ANS","=",
+  ];
+
+  function evaluateExpression() {
+	output = math.evaluate(input);
+	history = input;
+  }
 </script>
 
 <main>
-	<h1>Hello {name}!</h1>
-	<p>Visit the <a href="https://svelte.dev/tutorial">Svelte tutorial</a> to learn how to build Svelte apps.</p>
-	<h1> {calcView} </h1>
-	<!-- <Tiptap myContent= {calcView} /> -->
-	<Tiptap />
-
-	<div class="number-pad">
-		<div>
-			<button on:click={zero}> 
-				0 
-			</button>
-		</div>
-		<div>1</div>
-		<div>2</div>
-		<div>+</div>
-		<div>3</div>  
-		<div>4</div>
-		<div>5</div>
-		<div>-</div>
-		<div>6</div>  
-		<div>7</div>
-		<div>8</div>
-		<div>=</div>
-		<div>9</div>
-	</div>
+  <h1>{name}'s PRO CALCULATOR</h1>
+  <div class="history-view">
+	{history}
+  </div>
+  <div class="current-view">
+    <div class="input-view" contenteditable="true">
+      {input}
+    </div>
+	<div class="current-view-equal">=</div>
+    <div class="output-view">{output}</div>
+  </div>
+  <div class="number-pad">
+    {#each keys as key}
+      <NumPadKey symbol={key} bind:value={input} on:equal={evaluateExpression} />
+    {/each}
+  </div>
 </main>
 
 <style>
-	main {
-		text-align: center;
-		padding: 1em;
-		max-width: 240px;
-		margin: 0 auto;
-	}
+  main {
+    text-align: center;
+    padding: 1em;
+    max-width: 240px;
+    margin: 0 auto;
+  }
 
-	h1 {
-		color: #ff3e00;
-		text-transform: uppercase;
-		font-size: 4em;
-		font-weight: 100;
-	}
-	button {
-		width: 100%;
-		height: 100%;
-		background-color: rgba(255, 255, 255, 0);
-		border: none;
-		margin: 0;
-		padding: 0.4em;
-	}
+  h1 {
+    color: #ff3e00;
+    text-transform: uppercase;
+    font-size: 4em;
+    font-weight: 100;
+  }
 
-	@media (min-width: 640px) {
-		main {
-			max-width: none;
-		}
-	}
-
-	.number-pad{
-		display: grid;
-		grid-template-columns: auto auto auto auto  ;
-		grid-gap: 10px;
-		background-color: #2196F3;
-		padding: 10px;
-	}
-
-	.number-pad > div {
-		background-color: rgba(255, 255, 255, 0.8);
-		text-align: center;
-		font-size: 30px;
-	}
+  @media (min-width: 640px) {
+    main {
+      max-width: none;
+    }
+  }
+  .current-view{
+	display: grid;
+	grid-template-columns: auto min-content auto;
+	font: 30px;
+	background-color: aquamarine;
+	padding: 0.8em;
+  }
+  .input-view {
+	text-align: left;
+	background-color: rgba(255, 255, 255, 0.15);
+  }
+  .current-view-equal{
+	background-color: rgba(255, 255, 255, 0.1);
+  }
+  .output-view {
+	  text-align: right;
+	background-color: rgba(255, 255, 255, 0.05);
+  }
+  .number-pad {
+    display: grid;
+    grid-template-columns: auto auto auto auto auto;
+    grid-gap: 0.75em;
+    background-color: #2196f3;
+    padding: 0.75em;
+  }
 </style>

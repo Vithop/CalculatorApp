@@ -2,12 +2,11 @@
     import { onMount, onDestroy } from 'svelte'
     import { Editor } from '@tiptap/core'
     import StarterKit from '@tiptap/starter-kit'
-    import {expression} from '../../store/store.js'
 
-    // export let myContent;
+    export let editor
 
     let element
-    let editor
+    let content
   
     onMount(() => {
       editor = new Editor({
@@ -15,11 +14,12 @@
         extensions: [
           StarterKit,
         ],
-        content: expression,
+        content: content,
         onTransaction: () => {
           // force re-render so `editor.isActive` works as expected
-          editor = editor
+          editor = editor;
         },
+
       })
     })
   
