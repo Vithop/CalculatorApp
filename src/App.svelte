@@ -1,45 +1,64 @@
 <script>
-
   import NumPadKey from "./lib/NumPadKey.svelte";
-  import { create, all } from 'mathjs'
+  import { standardKeys } from "./lib/NumPadTemplates.svelte";
+  import { create, all } from "mathjs";
 
-  export let name;
-  
-  const config = { }
-  const math = create(all, config)
-  
+  const testHistory = ["1+1=2", "2+5=7", "10*45=450"];
+  const config = {};
+  const math = create(all, config);
+
   let input = "";
   let output = "";
-  let history = "";
-
-  const keys = [
-    "7","8","9","DEL","AC",
-    "4","5","6","MULT","DIV",
-    "1","2","3","ADD","SUB",
-    "0",".","EXP","ANS","=",
-  ];
+  let equationHistory = [];
 
   function evaluateExpression() {
-	output = math.evaluate(input);
-	history = input;
+    output = math.evaluate(input);
+    equationHistory = [...equationHistory, `${input}=${output}`];
+    input = "";
   }
+
+  const getEquation = (index) => () => {
+    input = equationHistory[index];
+  };
+
+  const keyBoardToOps = {
+    "Enter": evaluateExpression,
+  }
+  function handleKeydown(event) {
+		// key = event.key;
+		// keyCode = event.keyCode;
+    if (event.keyCode == 13 && !event.shiftKey){
+    // prevent default behavior
+      event.preventDefault();
+    }
+    if (keyBoardToOps && keyBoardToOps[event.key]) {
+      keyBoardToOps[event.key]();
+    }
+	}
 </script>
 
+<svelte:window on:keydown={handleKeydown}/>
+
 <main>
-  <h1>{name}'s PRO CALCULATOR</h1>
   <div class="history-view">
-	{history}
+    <br />
+    {#each equationHistory as equation, index}
+      <span on:click={getEquation(index)}>{equation}</span>
+      <br />
+    {/each}
   </div>
   <div class="current-view">
-    <div class="input-view" contenteditable="true">
-      {input}
-    </div>
-	<div class="current-view-equal">=</div>
+    <div class="input-view" contenteditable="true" bind:innerHTML={input} />
+    <div class="current-view-equal">=</div>
     <div class="output-view">{output}</div>
   </div>
   <div class="number-pad">
-    {#each keys as key}
-      <NumPadKey symbol={key} bind:value={input} on:equal={evaluateExpression} />
+    {#each standardKeys as key, index}
+      <NumPadKey
+        symbol={key}
+        bind:value={input}
+        on:equal={evaluateExpression}
+      />
     {/each}
   </div>
 </main>
@@ -64,23 +83,24 @@
       max-width: none;
     }
   }
-  .current-view{
-	display: grid;
-	grid-template-columns: auto min-content auto;
-	font: 30px;
-	background-color: aquamarine;
-	padding: 0.8em;
+  .current-view {
+    display: grid;
+    grid-template-columns: auto min-content auto;
+    font: 30px;
+    background-color: aquamarine;
+    padding: 0.8em;
+    height: auto;
   }
   .input-view {
-	text-align: left;
-	background-color: rgba(255, 255, 255, 0.15);
+    text-align: left;
+    background-color: rgba(255, 255, 255, 0.15);
   }
-  .current-view-equal{
-	background-color: rgba(255, 255, 255, 0.1);
+  .current-view-equal {
+    background-color: rgba(255, 255, 255, 0.1);
   }
   .output-view {
-	  text-align: right;
-	background-color: rgba(255, 255, 255, 0.05);
+    text-align: right;
+    background-color: rgba(255, 255, 255, 0.05);
   }
   .number-pad {
     display: grid;
