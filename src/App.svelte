@@ -4,17 +4,25 @@
   import { create, all } from "mathjs";
 
   const testHistory = ["1+1=2", "2+5=7", "10*45=450"];
+
   const config = {};
   const math = create(all, config);
 
   let input = "";
   let output = "";
   let equationHistory = [];
+  let clearFlag = false; 
 
   function evaluateExpression() {
-    output = math.evaluate(input);
-    equationHistory = [...equationHistory, `${input}=${output}`];
-    input = "";
+    try {
+      output = math.evaluate(input);
+      equationHistory = [...equationHistory, `${input}=${output}`];
+      input = "";
+    } catch (error) {
+      input = error.name;
+      output = "";
+      clearFlag = true;
+    }
   }
 
   const getEquation = (index) => () => {
@@ -24,15 +32,20 @@
   const keyBoardToOps = {
     "Enter": evaluateExpression,
   }
+
   function handleKeydown(event) {
 		// key = event.key;
 		// keyCode = event.keyCode;
-    if (event.keyCode == 13 && !event.shiftKey){
-    // prevent default behavior
-      event.preventDefault();
+    if (clearFlag == true) {
+      input = "";
+      clearFlag = false;
     }
     if (keyBoardToOps && keyBoardToOps[event.key]) {
-      keyBoardToOps[event.key]();
+      if (event.keyCode == 13 && !event.shiftKey){
+      // prevent default behavior
+        event.preventDefault();
+        keyBoardToOps[event.key]();
+      }
     }
 	}
 </script>
@@ -48,7 +61,7 @@
     {/each}
   </div>
   <div class="current-view">
-    <div class="input-view" contenteditable="true" bind:innerHTML={input} />
+    <div class="input-view" contenteditable="true" bind:innerHTML={input}/>
     <div class="current-view-equal">=</div>
     <div class="output-view">{output}</div>
   </div>
@@ -57,6 +70,7 @@
       <NumPadKey
         symbol={key}
         bind:value={input}
+        bind:clearFlag={clearFlag}
         on:equal={evaluateExpression}
       />
     {/each}
@@ -83,6 +97,13 @@
       max-width: none;
     }
   }
+  /* Use median queries to manage css for different screen sizes this template is sorted by width */
+  @media (min-width:320px)  { /* smartphones, iPhone, portrait 480x320 phones */ }
+  @media (min-width:481px)  { /* portrait e-readers (Nook/Kindle), smaller tablets @ 600 or @ 640 wide. */ }
+  @media (min-width:641px)  { /* portrait tablets, portrait iPad, landscape e-readers, landscape 800x480 or 854x480 phones */ }
+  @media (min-width:961px)  { /* tablet, landscape iPad, lo-res laptops ands desktops */ }
+  @media (min-width:1025px) { /* big landscape tablets, laptops, and desktops */ }
+  @media (min-width:1281px) { /* hi-res laptops and desktops */ }
   .current-view {
     display: grid;
     grid-template-columns: auto min-content auto;

@@ -3,6 +3,7 @@
 
   export let symbol;
   export let value;
+  export let clearFlag;
 
   const dispatch = createEventDispatcher();
 
@@ -24,6 +25,10 @@
   };
 
   function emmitKeyPress() {
+    if (clearFlag == true) {
+      value = "";
+      clearFlag = false;
+    }
     if (symbolToOps && symbolToOps[symbol]) {
       value = symbolToOps[symbol]();
     } else {
