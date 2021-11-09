@@ -15,8 +15,8 @@
 
   function evaluateExpression() {
     try {
-      output = math.evaluate(input);
-      equationHistory = [...equationHistory, `${input}=${output}`];
+      output = `${input}=${math.evaluate(input)}`;
+      equationHistory = [...equationHistory, output];
       input = "";
     } catch (error) {
       input = error.name;
@@ -30,19 +30,25 @@
   };
 
   const keyBoardToOps = {
-    "Enter": evaluateExpression,
+    "Enter" : evaluateExpression,
+  }
+
+  $:if (input.charAt(-1) == '=') {
+    evaluateExpression()
+    input = input
   }
 
   function handleKeydown(event) {
 		// key = event.key;
 		// keyCode = event.keyCode;
+    // console.log(event.key);
     if (clearFlag == true) {
       input = "";
       clearFlag = false;
     }
     if (keyBoardToOps && keyBoardToOps[event.key]) {
       if (event.keyCode == 13 && !event.shiftKey){
-      // prevent default behavior
+        // prevent default behavior
         event.preventDefault();
         keyBoardToOps[event.key]();
       }
@@ -55,15 +61,14 @@
 <main>
   <div class="history-view">
     <br />
-    {#each equationHistory as equation, index}
+    {#each equationHistory.slice(0,-1) as equation, index}
       <span on:click={getEquation(index)}>{equation}</span>
       <br />
     {/each}
+    <div class="output-view">{output}</div>
   </div>
   <div class="current-view">
     <div class="input-view" contenteditable="true" bind:innerHTML={input}/>
-    <div class="current-view-equal">=</div>
-    <div class="output-view">{output}</div>
   </div>
   <div class="number-pad">
     {#each standardKeys as key, index}
@@ -81,8 +86,9 @@
   main {
     text-align: center;
     padding: 1em;
-    max-width: 240px;
+    max-width: auto;
     margin: 0 auto;
+    display: grid;
   }
 
   h1 {
@@ -94,7 +100,7 @@
 
   @media (min-width: 640px) {
     main {
-      max-width: none;
+      max-width: auto;
     }
   }
   /* Use median queries to manage css for different screen sizes this template is sorted by width */
@@ -106,22 +112,26 @@
   @media (min-width:1281px) { /* hi-res laptops and desktops */ }
   .current-view {
     display: grid;
-    grid-template-columns: auto min-content auto;
-    font: 30px;
+    grid-template-columns: auto;
     background-color: aquamarine;
-    padding: 0.8em;
     height: auto;
+    font-size: 2em;
+  }
+  .history-view{
+    grid-template-columns: auto;
+    row-gap: 1em;
   }
   .input-view {
     text-align: left;
     background-color: rgba(255, 255, 255, 0.15);
-  }
-  .current-view-equal {
-    background-color: rgba(255, 255, 255, 0.1);
+    color: auto;
+    padding: 0.4em;
   }
   .output-view {
-    text-align: right;
-    background-color: rgba(255, 255, 255, 0.05);
+    text-align: left;
+    background-color: darkcyan;
+    color: white;
+    padding: 0.4em;
   }
   .number-pad {
     display: grid;
