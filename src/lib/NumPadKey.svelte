@@ -48,6 +48,7 @@
     background-color: rgba(255, 255, 255, 0.8);
     text-align: center;
     font-size: 2em;
+    border-radius: 0.5em;
   }
   button {
     width: 100%;

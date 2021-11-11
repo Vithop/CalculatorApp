@@ -89,6 +89,7 @@
     max-width: auto;
     margin: 0 auto;
     display: grid;
+    background-color: black;
   }
 
   h1 {
@@ -110,16 +111,24 @@
   @media (min-width:961px)  { /* tablet, landscape iPad, lo-res laptops ands desktops */ }
   @media (min-width:1025px) { /* big landscape tablets, laptops, and desktops */ }
   @media (min-width:1281px) { /* hi-res laptops and desktops */ }
+  
+  .history-view{
+    grid-template-columns: auto;
+    height: auto;
+    row-gap: 1em;
+  }
+  .output-view {
+    text-align: left;
+    background-color: rgba(255, 255, 255, 0.719);
+    color: white;
+    padding: 0.4em;
+  }
   .current-view {
     display: grid;
     grid-template-columns: auto;
-    background-color: aquamarine;
+    background-color: rgb(75, 75, 75);
     height: auto;
     font-size: 2em;
-  }
-  .history-view{
-    grid-template-columns: auto;
-    row-gap: 1em;
   }
   .input-view {
     text-align: left;
@@ -127,17 +136,13 @@
     color: auto;
     padding: 0.4em;
   }
-  .output-view {
-    text-align: left;
-    background-color: darkcyan;
-    color: white;
-    padding: 0.4em;
-  }
+
   .number-pad {
     display: grid;
     grid-template-columns: auto auto auto auto auto;
     grid-gap: 0.75em;
-    background-color: #2196f3;
+    background-color: rgba(255, 255, 255, 0.9);
     padding: 0.75em;
+    border-radius: 0 0 1em 1em;
   }
 </style>
