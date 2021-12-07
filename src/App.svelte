@@ -67,9 +67,7 @@
     {/each}
     <div class="output-view">{output}</div>
   </div>
-  <div class="current-view">
-    <div class="input-view" contenteditable="true" bind:innerHTML={input}/>
-  </div>
+  <div class="input-view" contenteditable="true" bind:innerHTML={input}/>
   <div class="number-pad">
     {#each standardKeys as key, index}
       <NumPadKey
@@ -89,7 +87,7 @@
     max-width: auto;
     margin: 0 auto;
     display: grid;
-    background-color: black;
+    background-image: linear-gradient(60deg, rgba(0, 255, 221, 1), rgb(89, 0, 255));
   }
 
   h1 {
@@ -112,36 +110,46 @@
   @media (min-width:1025px) { /* big landscape tablets, laptops, and desktops */ }
   @media (min-width:1281px) { /* hi-res laptops and desktops */ }
   
+  @mixin .glassProperty{
+    
+  }
   .history-view{
     grid-template-columns: auto;
+    text-align: left;
+    padding: 0.4em;
     height: auto;
     row-gap: 1em;
+    font-size: 1.75em;
+    color: white;
   }
   .output-view {
     text-align: left;
-    background-color: rgba(255, 255, 255, 0.719);
+    background-color: rgba(255, 255, 255, 0.6);
     color: white;
-    padding: 0.4em;
-  }
-  .current-view {
-    display: grid;
-    grid-template-columns: auto;
-    background-color: rgb(75, 75, 75);
-    height: auto;
-    font-size: 2em;
+    font-size: 1.5em;
+    padding: 0.2em;
+    border-radius: 16px;
   }
   .input-view {
     text-align: left;
-    background-color: rgba(255, 255, 255, 0.15);
-    color: auto;
     padding: 0.4em;
+    height: auto;
+    font-size: 2em;
+    color:white;
+
+     /* From https://css.glass */
+    background: rgba(255, 255, 255, 0.418);
+    border-radius: 16px;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(40px);
+    -webkit-backdrop-filter: blur(40px);
   }
 
   .number-pad {
     display: grid;
     grid-template-columns: auto auto auto auto auto;
     grid-gap: 0.75em;
-    background-color: rgba(255, 255, 255, 0.9);
+    background-color: rgba(255, 255, 255, 0.7);
     padding: 0.75em;
     border-radius: 0 0 1em 1em;
   }
