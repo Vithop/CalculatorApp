@@ -110,9 +110,9 @@
   @media (min-width:1025px) { /* big landscape tablets, laptops, and desktops */ }
   @media (min-width:1281px) { /* hi-res laptops and desktops */ }
   
-  @mixin .glassProperty{
+  /* @mixin glassProperty{
     
-  }
+  } */
   .history-view{
     grid-template-columns: auto;
     text-align: left;
