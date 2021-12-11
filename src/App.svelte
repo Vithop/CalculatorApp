@@ -122,17 +122,23 @@
     font-size: 1.75em;
     color: white;
   }
+  .history-view > span{
+    padding-left: 0.4em;
+  }
+
   .output-view {
     text-align: left;
     background-color: rgba(255, 255, 255, 0.6);
     color: white;
     font-size: 1.5em;
+    min-height: 1em;
     padding: 0.2em;
     border-radius: 16px;
   }
   .input-view {
     text-align: left;
     padding: 0.4em;
+    margin: 0.25em;
     height: auto;
     font-size: 2em;
     color:white;
@@ -151,6 +157,7 @@
     grid-gap: 0.75em;
     background-color: rgba(255, 255, 255, 0.7);
     padding: 0.75em;
-    border-radius: 0 0 1em 1em;
+    margin: 0.25em;
+    border-radius: 1em;
   }
 </style>
